@@ -35,6 +35,10 @@ public class Program {
 		insertObj.setName("Miguel Nascimento");
 		SellerD.update(insertObj);
 		System.out.println("UPDATED! " + insertObj);
+		
+		System.out.println("\nDELETE");
+		SellerD.deleteById(7);
+		System.out.println("DELETED! " );
 		DB.close();
 	}
 
