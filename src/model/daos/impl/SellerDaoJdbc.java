@@ -1,9 +1,11 @@
 package model.daos.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +27,10 @@ public class SellerDaoJdbc implements SellerDao {
 
 	public void reset() {
 		try {
-			if (rs != null) {
+			if (rs != null && !rs.isClosed()) {
 				rs.close();
 			}
-			if (st != null) {
+			if (st != null && !st.isClosed()) {
 				st.close();
 			}
 		} catch (SQLException e) {
@@ -65,13 +67,51 @@ public class SellerDaoJdbc implements SellerDao {
 
 	@Override
 	public void insert(Seller obj) {
-		// TODO Auto-generated method stub
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) VALUES (?, ?, ?, ?, ?);",
+					Statement.RETURN_GENERATED_KEYS);
 
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new Date(obj.getBirthDate().getTime()));
+			st.setDouble(4, obj.getSalary());
+			st.setInt(5, obj.getDepartment().getId());
+
+			if (st.executeUpdate() > 0) {
+				rs = st.getGeneratedKeys();
+				if (rs.next()) {
+					obj.setId(rs.getInt(1));
+				}
+			} else {
+				throw new DBException("Unexpected error! No rows affected!");
+			}
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			reset();
+		}
 	}
 
 	@Override
 	public void update(Seller obj) {
-		// TODO Auto-generated method stub
+		try {
+			st = conn.prepareStatement(
+					"UPDATE seller SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? WHERE ID = ?;");
+
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new Date(obj.getBirthDate().getTime()));
+			st.setDouble(4, obj.getSalary());
+			st.setInt(5, obj.getDepartment().getId());
+			st.setInt(6, obj.getId());
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			reset();
+		}
 
 	}
 

@@ -1,8 +1,12 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 public class Seller implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,6 +21,10 @@ public class Seller implements Serializable {
 
 	public Seller(Integer id, Department department) {
 		this.id = id;
+		this.department = department;
+	}
+
+	public Seller(Department department) {
 		this.department = department;
 	}
 
@@ -38,7 +46,15 @@ public class Seller implements Serializable {
 	}
 
 	public void setName(String name) {
-		this.name = name.toLowerCase();
+		String[] fields = name.trim().replaceAll("\\s{2,}", " ").split(" ");
+		name = "";
+
+		for (String s : fields) {
+			name += s.substring(0, 1).toUpperCase();
+			name += s.substring(1).toLowerCase() + " ";
+		}
+
+		this.name = name.trim();
 	}
 
 	public void setEmail(String email) {
