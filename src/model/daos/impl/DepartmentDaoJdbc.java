@@ -45,6 +45,9 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 					obj.setId(rs.getInt(1));
 				}
 			}
+			else {
+				throw new DBException("Unexpected error! No rows affected!");
+			}
 		} catch (Exception e) {
 			throw new DBException(e.getMessage());
 		} finally {
@@ -54,8 +57,19 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
+		try {
+			st = conn.prepareStatement("UPDATE department SET Name = ? WHERE Id = ?;");
+			st.setString(1, obj.getName());
+			st.setInt(2, obj.getId());
 
+			if (st.executeUpdate() == 0) {
+				throw new DBException("Unexpected error! No rows affected!");
+			}
+		} catch (Exception e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			reset();
+		}
 	}
 
 	@Override
