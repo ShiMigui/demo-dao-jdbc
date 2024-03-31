@@ -112,7 +112,18 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 	@Override
 	public List<Department> findAll() {
 		List<Department> deps = new ArrayList<>();
-
+		try {
+			st = conn.prepareStatement("SELECT Id, Name FROM department ORDER BY Name;");
+			
+			rs = st.executeQuery();
+			while(rs.next()) {
+				deps.add(new Department(rs.getInt("Id"), rs.getString("Name")));
+			}
+		} catch (Exception e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			reset();
+		}
 		return deps;
 	}
 

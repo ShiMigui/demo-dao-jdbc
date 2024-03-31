@@ -3,7 +3,6 @@ package application;
 import db.DB;
 import model.daos.DepartmentDao;
 import model.daos.FactoryDao;
-import model.entities.Department;
 
 public class Program {
 
@@ -21,10 +20,12 @@ public class Program {
 		d.setName("Radio");
 		dep.update(d);
 		System.out.println("UPDATED: ID=" + d.getId() + " - Name=" + d.getName());
-		*/
 		
 		Department finded = dep.findById(2);
-		System.out.println("FINDED BY ID: ID=" + finded.getId() + " - Name=" + finded.getName());
+		System.out.println("FINDED BY ID: ID=" + finded.getId() + " - Name=" + finded.getName());*/
+		
+		System.out.println("FindALL()");
+		dep.findAll().forEach(System.out::println);
 		DB.close();
 	}
 
