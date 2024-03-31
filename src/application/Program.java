@@ -11,6 +11,9 @@ public class Program {
 		DepartmentDao dep = FactoryDao.departmentDao();
 		Department d = new Department().setName("Music");
 		
+		dep.deleteById(6);
+		System.out.println("DELETED!");
+		
 		dep.insert(d);
 		System.out.println("INSERTED: ID=" + d.getId() + " - Name=" + d.getName());
 		
