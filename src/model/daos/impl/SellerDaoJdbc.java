@@ -19,17 +19,16 @@ public class SellerDaoJdbc implements SellerDao {
 	public SellerDaoJdbc(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	public void reset() {
 		try {
-			if(rs!= null) {
+			if (rs != null) {
 				rs.close();
 			}
-			if(st!= null) {
+			if (st != null) {
 				st.close();
 			}
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		}
 	}
@@ -61,21 +60,30 @@ public class SellerDaoJdbc implements SellerDao {
 			st.setInt(1, id);
 
 			rs = st.executeQuery();
-			if(rs.next()) {
-				Department dep = new Department(rs.getInt("DepartmentId"), rs.getString("DName"));
-				seller = new Seller(id, dep);
-				seller.setEmail(rs.getString("Email"));
-				seller.setName(rs.getString("Name"));
-				seller.setSalary(rs.getDouble("BaseSalary"));
-				seller.setBirthDate(rs.getDate("BirthDate"));
+			if (rs.next()) {
+				Department dep = instanceDepartment(rs);
+				seller = instanceSeller(rs, dep);
 			}
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
-		}
-		finally {
+		} finally {
 			reset();
 		}
 		return seller;
+	}
+
+	private Seller instanceSeller(ResultSet rs2, Department dep) throws SQLException {
+		Seller seller = new Seller(rs.getInt("Id"), dep);
+		seller.setEmail(rs.getString("Email"));
+		seller.setName(rs.getString("Name"));
+		seller.setSalary(rs.getDouble("BaseSalary"));
+		seller.setBirthDate(rs.getDate("BirthDate"));
+		return seller;
+	}
+
+	private Department instanceDepartment(ResultSet rs2) throws SQLException {
+		Department dep = new Department(rs.getInt("DepartmentId"), rs.getString("DName"));
+		return dep;
 	}
 
 	@Override
