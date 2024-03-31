@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DBException;
@@ -44,8 +45,7 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 				if (rs.next()) {
 					obj.setId(rs.getInt(1));
 				}
-			}
-			else {
+			} else {
 				throw new DBException("Unexpected error! No rows affected!");
 			}
 		} catch (Exception e) {
@@ -90,14 +90,30 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 
 	@Override
 	public Department findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Department dep = null;
+		try {
+			st = conn.prepareStatement("SELECT Name FROM department WHERE Id = ?;");
+			st.setInt(1, id);
+
+			rs = st.executeQuery();
+			if (rs.next()) {
+				dep = new Department(id, rs.getString("Name"));
+			} else {
+				throw new DBException("Unexpected error! No rows affected!");
+			}
+		} catch (Exception e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			reset();
+		}
+		return dep;
 	}
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Department> deps = new ArrayList<>();
+
+		return deps;
 	}
 
 }
