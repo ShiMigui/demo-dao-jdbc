@@ -61,6 +61,10 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 			st = conn.prepareStatement("UPDATE department SET Name = ? WHERE Id = ?;");
 			st.setString(1, obj.getName());
 			st.setInt(2, obj.getId());
+
+			if (st.executeUpdate() == 0) {
+				throw new DBException("Unexpected error! No rows affected!");
+			}
 		} catch (Exception e) {
 			throw new DBException(e.getMessage());
 		} finally {
