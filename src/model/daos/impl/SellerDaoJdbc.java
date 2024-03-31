@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DBException;
 import model.daos.SellerDao;
@@ -44,12 +46,12 @@ public class SellerDaoJdbc implements SellerDao {
 			st.setInt(1, department.getId());
 
 			rs = st.executeQuery();
-			
+
 			while (rs.next()) {
-				if(department.getName() == "" || department.getName() == null) {
+				if (department.getName() == "" || department.getName() == null) {
 					department = instanceDepartment(rs);
 				}
-				
+
 				sellers.add(instanceSeller(rs, department));
 			}
 		} catch (SQLException e) {
@@ -116,8 +118,33 @@ public class SellerDaoJdbc implements SellerDao {
 
 	@Override
 	public List<Seller> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Seller> sellers = new ArrayList<>();
+
+		try {
+			st = conn.prepareStatement(
+					"SELECT s.*, d.Name as DName FROM seller s JOIN department d ON (s.DepartmentId = d.Id) ORDER By DName;");
+
+			rs = st.executeQuery();
+
+			Map<Integer, Department> deps = new HashMap<>();
+			Department department;
+			while (rs.next()) {
+				int id = rs.getInt("DepartmentId");
+				department = deps.get(id);
+				if (department == null) {
+					deps.put(id, instanceDepartment(rs));
+					department = deps.get(id);
+				}
+
+				sellers.add(instanceSeller(rs, department));
+			}
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			reset();
+		}
+
+		return sellers;
 	}
 
 }

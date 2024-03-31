@@ -15,6 +15,9 @@ public class Program {
 		
 		System.out.println("FindByDepartment");
 		SellerD.findByDepartment(s.getDepartment()).forEach(System.out::println);
+		
+		System.out.println("FindAll");
+		SellerD.findAll().forEach(System.out::println);
 		DB.close();
 	}
 
