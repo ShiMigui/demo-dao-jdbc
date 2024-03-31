@@ -9,8 +9,12 @@ public class Program {
 
 	public static void main(String[] args) {
 		SellerDao SellerD = FactoryDao.sellerDao();
-		Seller s = SellerD.findById(3);
-		System.out.println(s);
+		Seller s = SellerD.findById(2);
+		System.out.println("FindById(): " + s);
+		
+		
+		System.out.println("FindByDepartment");
+		SellerD.findByDepartment(s.getDepartment()).forEach(System.out::println);
 		DB.close();
 	}
 
