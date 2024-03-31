@@ -14,16 +14,17 @@ public class Department implements Serializable {
 		setName(name);
 	}
 	
-	public Department(Integer id) {
-		this.id = id;
+	public Department() {
 	}
 
-	public void setId(Integer id) {
+	public Department setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setName(String name) {
+	public Department setName(String name) {
 		this.name = name.toLowerCase();
+		return this;
 	}
 
 	public Integer getId() {
