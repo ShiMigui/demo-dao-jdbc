@@ -14,6 +14,10 @@ public class Department implements Serializable {
 		setName(name);
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public void setName(String name) {
 		this.name = name.toLowerCase();
 	}

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class Seller implements Serializable{
+public class Seller implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 	private String name;
 	private String email;
@@ -26,6 +26,14 @@ public class Seller implements Serializable{
 		this.email = email;
 		this.birthDate = birthDate;
 		this.salary = salary;
+		this.department = department;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setDepartment(Department department) {
 		this.department = department;
 	}
 
@@ -91,6 +99,5 @@ public class Seller implements Serializable{
 		return "Seller [id=" + id + ", name=" + name + ", email=" + email + ", birthDate=" + birthDate + ", salary="
 				+ salary + ", department=" + department + "]";
 	}
-	
-	
+
 }
