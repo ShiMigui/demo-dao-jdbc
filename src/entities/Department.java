@@ -10,16 +10,12 @@ public class Department implements Serializable {
 	private String name;
 
 	public Department(Integer id, String name) {
-		setId(id);
+		this.id = id;
 		setName(name);
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.toLowerCase();
 	}
 
 	public Integer getId() {
